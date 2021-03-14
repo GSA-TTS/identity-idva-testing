@@ -1,26 +1,18 @@
 """ Locustfile for load testing GIVE functionality """
-import time
 import os
 import random
+import uuid
 from locust import HttpUser, task, constant
 
-CLIENT_SECRET = str(os.environ["CLIENT_SECRET"])
-CLIENT_ID = str(os.environ["CLIENT_ID"])
+CLIENT_SECRET = str(os.environ["LOCUST_CLIENT_SECRET"])
+CLIENT_ID = str(os.environ["LOCUST_CLIENT_ID"])
 
 
-class GiveUser(HttpUser):
+class IdemiaUser(HttpUser):
+    """ Simulate user interaction to the idemia microservice """
+
     wait_time = constant(1)
     bearer_token = None
-
-    @task
-    def idemia_locations(self):
-        """ Perform GET on the idemia /locations endpoint """
-        zipcode = random.randrange(10000, 99999)
-        self.client.get(
-            "/ipp/locations/%i" % zipcode,
-            name="/locations/zipcode",
-            headers={"Authorization": self.bearer_token},
-        )
 
     def on_start(self):
         """ Generate the OAuth2.0 token for the user """
@@ -35,3 +27,36 @@ class GiveUser(HttpUser):
         )
         json_response = response.json()
         self.bearer_token = f"token {json_response['access_token']}"
+
+    @task
+    def idemia_locations(self):
+        """ Perform GET on the Idemia /locations endpoint """
+        zipcode = random.randrange(10000, 99999)
+        self.client.get(
+            "/ipp/locations/%i" % zipcode,
+            name="/locations/zipcode",
+            headers={"Authorization": self.bearer_token},
+        )
+
+    @task
+    def idemia_enrollment(self):
+        """ Perform create & read operarions on the Idemia /enrollment endpoint """
+        enrollment_uuid = uuid.uuid4()
+
+        # Create
+        self.client.post(
+            "/ipp/enrollment/",
+            data={
+                "firstName": "Bob",
+                "lastName": "Testington",
+                "record_csp_uuid": enrollment_uuid,
+            },
+            headers={"Authorization": self.bearer_token},
+        )
+
+        # Read
+        self.client.get(
+            "/ipp/enrollment/%s" % enrollment_uuid,
+            headers={"Authorization": self.bearer_token},
+            name="/ipp/enrollment/uuid",
+        )
