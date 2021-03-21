@@ -47,9 +47,9 @@ class IdemiaUser(HttpUser):
         self.client.post(
             "/ipp/enrollment/",
             data={
-                "firstName": "Bob",
-                "lastName": "Testington",
-                "record_csp_uuid": enrollment_uuid,
+                "first_name": "Bob",
+                "last_name": "Testington",
+                "csp_user_uuid": enrollment_uuid,
             },
             headers={"Authorization": self.bearer_token},
         )
