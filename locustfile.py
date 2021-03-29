@@ -17,7 +17,7 @@ class IdemiaUser(HttpUser):
     def on_start(self):
         """ Generate the OAuth2.0 token for the user """
         response = self.client.post(
-            "/ipp/oauth2/token",
+            "/idemia/oauth2/token",
             data={
                 "client_id": CLIENT_ID,
                 "client_secret": CLIENT_SECRET,
@@ -33,7 +33,7 @@ class IdemiaUser(HttpUser):
         """ Perform GET on the Idemia /locations endpoint """
         zipcode = random.randrange(10000, 99999)
         self.client.get(
-            "/ipp/locations/%i" % zipcode,
+            "/idemia/locations/%i" % zipcode,
             name="/locations/zipcode",
             headers={"Authorization": self.bearer_token},
         )
@@ -45,7 +45,7 @@ class IdemiaUser(HttpUser):
 
         # Create
         self.client.post(
-            "/ipp/enrollment/",
+            "/idemia/enrollment/",
             data={
                 "first_name": "Bob",
                 "last_name": "Testington",
@@ -56,7 +56,7 @@ class IdemiaUser(HttpUser):
 
         # Read
         self.client.get(
-            "/ipp/enrollment/%s" % enrollment_uuid,
+            "/idemia/enrollment/%s" % enrollment_uuid,
             headers={"Authorization": self.bearer_token},
-            name="/ipp/enrollment/uuid",
+            name="/idemia/enrollment/uuid",
         )
