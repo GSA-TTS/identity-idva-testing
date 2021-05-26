@@ -68,7 +68,12 @@ class IdemiaUser(HttpUser):
 
 class SKTestUser(FastHttpUser):
     wait_time = constant_pacing(1)
+
     @task(1)
     def hello_world(self):
-        self.client.post(f"https://{SK_API_ROUTE}/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/flows/IU1iDIvviIth5jiYmNvgsS43Kg29RxyB/start",
-        data={},auth=None,headers={"x-sk-api-key":SK_API_KEY})
+        self.client.post(
+            f"https://{SK_API_ROUTE}/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/flows/IU1iDIvviIth5jiYmNvgsS43Kg29RxyB/start",
+            data={},
+            auth=None,
+            headers={"x-sk-api-key": SK_API_KEY},
+        )
