@@ -2,7 +2,7 @@
 import os
 import random
 import uuid
-from locust import HttpUser, task, constant, between
+from locust import HttpUser, task, constant, constant_pacing
 from locust.contrib.fasthttp import FastHttpUser
 
 CLIENT_SECRET = str(os.environ["LOCUST_CLIENT_SECRET"])
@@ -67,13 +67,7 @@ class IdemiaUser(HttpUser):
 
 
 class SKTestUser(FastHttpUser):
-    wait_time = between(1,1)
-    def on_start(self):
-        """ on_start is called when a Locust start before any task is scheduled """
-        pass
-    def on_stop(self):
-        """ on_stop is called when the TaskSet is stopping """
-        pass
+    wait_time = constant_pacing(1)
     @task(1)
     def hello_world(self):
         self.client.post(f"https://{SK_API_ROUTE}/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/flows/IU1iDIvviIth5jiYmNvgsS43Kg29RxyB/start",
