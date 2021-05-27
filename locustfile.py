@@ -3,7 +3,6 @@ import os
 import random
 import uuid
 from locust import HttpUser, task, constant, constant_pacing
-from locust.contrib.fasthttp import FastHttpUser
 
 CLIENT_SECRET = str(os.environ["LOCUST_CLIENT_SECRET"])
 CLIENT_ID = str(os.environ["LOCUST_CLIENT_ID"])
@@ -66,7 +65,7 @@ class IdemiaUser(HttpUser):
         )
 
 
-class SKTestUser(FastHttpUser):
+class SKTestUser(HttpUser):
     wait_time = constant_pacing(1)
 
     @task(1)
