@@ -66,10 +66,13 @@ class IdemiaUser(HttpUser):
 
 
 class SKTestUser(HttpUser):
+    """ Load test SK """
+
     wait_time = constant_pacing(1)
 
     @task(1)
-    def hello_world(self):
+    def basic_http_flow(self):
+        """ Invoke basic sk http flow """
         self.client.post(
             f"https://{SK_API_ROUTE}/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/flows/IU1iDIvviIth5jiYmNvgsS43Kg29RxyB/start",
             headers={"x-sk-api-key": SK_API_KEY},
