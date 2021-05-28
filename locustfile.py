@@ -9,13 +9,13 @@ CLIENT_ID = str(os.environ["LOCUST_CLIENT_ID"])
 
 
 class IdemiaUser(HttpUser):
-    """ Simulate user interaction to the idemia microservice """
+    """Simulate user interaction to the idemia microservice"""
 
     wait_time = constant(1)
     bearer_token = None
 
     def on_start(self):
-        """ Generate the OAuth2.0 token for the user """
+        """Generate the OAuth2.0 token for the user"""
         response = self.client.post(
             "/idemia/oauth2/token",
             data={
@@ -30,7 +30,7 @@ class IdemiaUser(HttpUser):
 
     @task
     def idemia_locations(self):
-        """ Perform GET on the Idemia /locations endpoint """
+        """Perform GET on the Idemia /locations endpoint"""
         zipcode = random.randrange(10000, 99999)
         self.client.get(
             "/idemia/locations/%i" % zipcode,
@@ -40,7 +40,7 @@ class IdemiaUser(HttpUser):
 
     @task
     def idemia_enrollment(self):
-        """ Perform create & read operarions on the Idemia /enrollment endpoint """
+        """Perform create & read operarions on the Idemia /enrollment endpoint"""
         enrollment_uuid = uuid.uuid4()
 
         # Create
