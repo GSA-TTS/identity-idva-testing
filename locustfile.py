@@ -12,13 +12,13 @@ SK_API_KEY = str(os.environ["SK_API_KEY"])
 
 
 class IdemiaUser(HttpUser):
-    """ Simulate user interaction to the idemia microservice """
+    """Simulate user interaction to the idemia microservice"""
 
     wait_time = constant(1)
     bearer_token = None
 
     def on_start(self):
-        """ Generate the OAuth2.0 token for the user """
+        """Generate the OAuth2.0 token for the user"""
         response = self.client.post(
             "/idemia/oauth2/token",
             data={
@@ -33,7 +33,7 @@ class IdemiaUser(HttpUser):
 
     @task
     def idemia_locations(self):
-        """ Perform GET on the Idemia /locations endpoint """
+        """Perform GET on the Idemia /locations endpoint"""
         zipcode = random.randrange(10000, 99999)
         self.client.get(
             "/idemia/locations/%i" % zipcode,
@@ -43,7 +43,7 @@ class IdemiaUser(HttpUser):
 
     @task
     def idemia_enrollment(self):
-        """ Perform create & read operarions on the Idemia /enrollment endpoint """
+        """Perform create & read operarions on the Idemia /enrollment endpoint"""
         enrollment_uuid = uuid.uuid4()
 
         # Create
@@ -65,15 +65,16 @@ class IdemiaUser(HttpUser):
         )
 
 
-class SKTestUser(HttpUser):
-    """ Load test SK """
+class SKTestUser(HttpUser):  # pylint: disable=too-few-public-methods
+    """Load test SK"""
 
     wait_time = constant_pacing(1)
 
     @task(1)
     def basic_http_flow(self):
-        """ Invoke basic sk http flow """
+        """Invoke basic sk http flow"""
         self.client.post(
-            f"https://{SK_API_ROUTE}/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/flows/IU1iDIvviIth5jiYmNvgsS43Kg29RxyB/start",
+            f"https://{SK_API_ROUTE}/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/flows/"
+            "IU1iDIvviIth5jiYmNvgsS43Kg29RxyB/start",
             headers={"x-sk-api-key": SK_API_KEY},
         )
