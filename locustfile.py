@@ -1,4 +1,4 @@
-""" Locustfile for load testing GIVE functionality """
+""" Locustfile for load testing IDVA functionality """
 import os
 import random
 import uuid

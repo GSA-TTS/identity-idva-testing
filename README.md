@@ -1,22 +1,22 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-# GIVE Load Testing
+# IDVA Load Testing
 
 ## Why this project
 
-In order to ensure the GIVE system is working correctly, it is necessary to test not only it's individual components,
+In order to ensure the IDVA system is working correctly, it is necessary to test not only it's individual components,
 but that those components work when accessed by its users. This project will aim to satisfy the following goals:
 
-- Allow GIVE to test the correctness of new and existing features
-- Monitor failures introduced by changes to GIVE services
-- Test how much traffic GIVE can handle before breaking
-- Identify areas within GIVE that can be improved (performance or otherwise)
+- Allow IDVA to test the correctness of new and existing features
+- Monitor failures introduced by changes to IDVA services
+- Test how much traffic IDVA can handle before breaking
+- Identify areas within IDVA that can be improved (performance or otherwise)
 
 ## Installation
-To install the GIVE Load Testing tooling, use the following:
+To install the IDVA Load Testing tooling, use the following:
 ```shell
-git clone https://github.com/18F/identity-give-load-testing
-cd identity-give-load-testing
+git clone https://github.com/18F/identity-idva-load-testing
+cd identity-idva-load-testing
 python -m venv .venv
 python -m pip install -r requirements.txt
 ```
