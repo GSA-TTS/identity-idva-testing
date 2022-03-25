@@ -1,7 +1,8 @@
 ---
 applications:
   - name: locust
-    no-route: true
+    routes:
+    - route: identity-idva-monitoring-locust-((ENVIRONMENT)).apps.internal
     memory: 1G
     instances: 1
     buildpacks:

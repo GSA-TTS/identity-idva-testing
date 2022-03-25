@@ -2,7 +2,7 @@
 import os
 from locust import HttpUser, task, constant_pacing, tag
 
-HTTP_FLOW_PATH = f"/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/flows/IU1iDIvviIth5jiYmNvgsS43Kg29RxyB/start"
+HTTP_FLOW_PATH = f"/v1/company/wdK3fH48XuoXzvZyeNJEYFA9i8K72BZg/policy/836afc2a695ad63dda8ae2a5c76908f9/start"
 SK_API_KEY = os.getenv("SK_API_KEY")
 
 
