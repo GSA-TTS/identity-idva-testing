@@ -17,7 +17,7 @@ main () {
                 es_url=${OPTARG}
                 ;;
             * )
-                echo "-f      follow\n-u url      set url"
+                help
                 exit 1
                 ;;
         esac
@@ -29,6 +29,13 @@ main () {
         single_audit
     fi
 
+}
+
+help () {
+    cat << EOF
+-f      follow
+-u url      set url
+EOF
 }
 
 #single line version
@@ -68,11 +75,6 @@ single_audit () {
     }'
 
     response=$(curl -X GET -s "$es_url/_search?scroll=1m" -H 'Content-Type: application/json' -d "$query")
-    scroll_id=$(echo "$response" | jq -r ._scroll_id)
-
-    echo "$response" | jq -c '.hits.hits[]._source'
-
-    response=$(curl -s "$es_url/_search/scroll" -H "Content-Type: application/json" -d "{ \"scroll\": \"1m\", \"scroll_id\": \"$scroll_id\" }")
     scroll_id=$(echo "$response" | jq -r ._scroll_id)
     hits_count=$(echo "$response" | jq -r '.hits.hits | length')
 

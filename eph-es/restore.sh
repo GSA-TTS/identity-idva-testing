@@ -2,6 +2,7 @@
 
 secrets_file="sk-secrets-dev.json"
 
+# The 'read' command pauses execution of the script until the user is ready to continue.
 echo "press key to continue to next step:"
 read -rp "1. restore app config"
 
