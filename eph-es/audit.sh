@@ -3,28 +3,33 @@
 #set -x
 
 es_url=http://localhost:8080
-follow=false
 
-while getopts "fu:" option; do
-    case ${option} in
-        f )
-            follow=true
-            ;;
-        u )
-            es_url=${OPTARG}
-            ;;
-        * )
-            echo "-f      follow\n-u url      set url"
-            exit 1
-            ;;
-    esac
-done
+main () {
 
-if [ "$follow" = true ] ; then
-    live_audit
-else
-    single_audit
-fi
+    follow=false
+
+    while getopts "fu:" option; do
+        case ${option} in
+            f )
+                follow=true
+                ;;
+            u )
+                es_url=${OPTARG}
+                ;;
+            * )
+                echo "-f      follow\n-u url      set url"
+                exit 1
+                ;;
+        esac
+    done
+
+    if [ "$follow" = true ] ; then
+        live_audit
+    else
+        single_audit
+    fi
+
+}
 
 #single line version
 #cf run-task --command "curl -X GET -s http://localhost:8080/_search -H 'Content-Type: application/json' -d '{ \"size\":10000, \"query\": { \"bool\": { \"must\": [ { \"match_phrase\": { \"eventVisibility\": { \"query\": \"customer\" } } }, { \"exists\": { \"field\": \"invokedByCustomerId\" } } ], \"filter\": [ { \"match_all\": {} } ], \"should\": [], \"must_not\": [] } } }' | jq -c '.hits.hits[]._source'" eph-es
@@ -62,12 +67,12 @@ single_audit () {
         }
     }'
 
-    response=$(curl -X GET -s $es_url/_search?scroll=1m -H 'Content-Type: application/json' -d "$query")
+    response=$(curl -X GET -s "$es_url/_search?scroll=1m" -H 'Content-Type: application/json' -d "$query")
     scroll_id=$(echo "$response" | jq -r ._scroll_id)
 
     echo "$response" | jq -c '.hits.hits[]._source'
 
-    response=$(curl -s $es_url/_search/scroll -H "Content-Type: application/json" -d "{ \"scroll\": \"1m\", \"scroll_id\": \"$scroll_id\" }")
+    response=$(curl -s "$es_url/_search/scroll" -H "Content-Type: application/json" -d "{ \"scroll\": \"1m\", \"scroll_id\": \"$scroll_id\" }")
     scroll_id=$(echo "$response" | jq -r ._scroll_id)
     hits_count=$(echo "$response" | jq -r '.hits.hits | length')
 
@@ -75,7 +80,7 @@ single_audit () {
 
         echo "$response" | jq -c '.hits.hits[]._source'
 
-        response=$(curl -s $es_url/_search/scroll -H "Content-Type: application/json" -d "{ \"scroll\": \"1m\", \"scroll_id\": \"$scroll_id\" }")
+        response=$(curl -s "$es_url/_search/scroll" -H "Content-Type: application/json" -d "{ \"scroll\": \"1m\", \"scroll_id\": \"$scroll_id\" }")
         scroll_id=$(echo "$response" | jq -r ._scroll_id)
         hits_count=$(echo "$response" | jq -r '.hits.hits | length')
     done
@@ -85,6 +90,8 @@ single_audit () {
 }
 
 live_audit () {
+
+    echo "Running Live Audit"
 
     live_query='{
         "size":10,
@@ -118,7 +125,7 @@ live_audit () {
     }'
 
     while true; do
-        response=$(curl -X GET -s $es_url/_search -H 'Content-Type: application/json' -d "$live_query")
+        response=$(curl -X GET -s "$es_url/_search" -H 'Content-Type: application/json' -d "$live_query")
         hits_count=$(echo "$response" | jq -r '.hits.hits | length')
         if (( hits_count > 0 )); then
             echo "$response" | jq -c '.hits.hits[]._source'
@@ -130,3 +137,5 @@ live_audit () {
     done
 
 }
+
+main "$@"

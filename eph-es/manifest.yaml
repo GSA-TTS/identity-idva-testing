@@ -10,8 +10,8 @@ applications:
     buildpacks:
       - binary_buildpack
     command: |
-      wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.4.2-linux-x86_64.tar.gz
-      wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.4.2-linux-x86_64.tar.gz.sha512
+      wget -q https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.4.2-linux-x86_64.tar.gz
+      wget -q https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-oss-7.4.2-linux-x86_64.tar.gz.sha512
       shasum -a 512 -c elasticsearch-oss-7.4.2-linux-x86_64.tar.gz.sha512 
       tar -xzf elasticsearch-oss-7.4.2-linux-x86_64.tar.gz --skip-old-files
       cd elasticsearch-7.4.2/ 
