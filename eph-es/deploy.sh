@@ -1,7 +1,7 @@
 #!/bin/bash
 
 env=dev
-secrets_file="sk-secrets-dev.json"
+secrets_file="sk-secrets-$env.json"
 
 # The 'read' command pauses execution of the script until the user is ready to continue.
 echo "press key to continue to next step:"
