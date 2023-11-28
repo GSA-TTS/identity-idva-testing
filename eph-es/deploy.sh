@@ -1,6 +1,7 @@
 #!/bin/bash
 
 env=dev
+# Path to current sk-secrets file
 secrets_file="sk-secrets-$env.json"
 
 # The 'read' command pauses execution of the script until the user is ready to continue.
